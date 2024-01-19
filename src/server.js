@@ -1,7 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 const http = require("http");
+const dotenv = require('dotenv');
 
+dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
@@ -12,7 +14,7 @@ app.use(
   })
 );
 
-const port = 3333;
+const port = process.env.PORT;
 server.listen(port, () => console.log("Start server in port " + port));
 
 
@@ -28,32 +30,32 @@ const UserToken = {
     token_expire_date: "09/01/2020 00:00:00",
 }
 
-const UserData ={
-    sapid: "T10030669",
-    username: "tkulpaporn.noi",
-    full_name: "น.ส. กุลภาภร น้อยโนนทอง",
-    position: "",
-    office: "งานบริการสารสนเทศและฝึกอบรม",
-    department: "ฝ่ายสารสนเทศ",
-    passwordExpiredDate: "01/01/1970 00:00:00",
-    daysLeft: 0,
-    passwordNeverExpire: true,
-    eng_name: "Miss TKULPAPORN NOINONTHONG",
-    email: "",
-    sn: "NOINONTHONG",
-    givenName: "KULPAPORN",
-    ipPhone: "",
-    pager: "",
-  }
+// const UserData ={
+//     sapid: "T10030669",
+//     username: "tkulpaporn.noi",
+//     full_name: "น.ส. กุลภาภร น้อยโนนทอง",
+//     position: "",
+//     office: "งานบริการสารสนเทศและฝึกอบรม",
+//     department: "ฝ่ายสารสนเทศ",
+//     passwordExpiredDate: "01/01/1970 00:00:00",
+//     daysLeft: 0,
+//     passwordNeverExpire: true,
+//     eng_name: "Miss TKULPAPORN NOINONTHONG",
+//     email: "",
+//     sn: "NOINONTHONG",
+//     givenName: "KULPAPORN",
+//     ipPhone: "",
+//     pager: "",
+//   }
 
   
 const {Pool} = require("pg");
 const pool  = new Pool({
-    user:"root",
-    host:"dpg-cmboofv109ks73adkjmg-a.singapore-postgres.render.com",
-    password:"YVINDPHCEmNLIunRvC0s2OJiOrukNwED",
-    database:"basdb",
-    port:5432,
+    user:process.env.DB_USER,
+    host:process.env.DB_HOST,
+    password:process.env.DB_PWD,
+    database:process.env.DB_NAME,
+    port:process.env.DB_PORT,
     ssl: true
 });
 
