@@ -65,17 +65,25 @@ pool.connect(
 })
 
 const Login = async(req, res) => {
-  const {name} = req.body.user;
-  const query = `SELECT * FROM "AD_Siriraj" WHERE username = '${name}'`;
-  console.log(query);
-  await pool.query(query)
-  .then((data)=>{
-    res.status(200).json({found: true,msg: "Success",userInfo:{UserData:data.rows[0],UserToken:UserToken,siRoles:siRoles}});
-  })
-  .catch((err)=>{
-      res.status(400).json({status:"ERROR",message:err})
-  });
-
+  try{
+    const {name} = req.body.user;
+    const query = `SELECT * FROM "AD_Siriraj" WHERE username = '${name}'`;
+    console.log(query);
+    await pool.query(query)
+    .then((data)=>{
+      if (data.rows[0]){
+        res.status(200).json({found: true,msg: "Success",userInfo:{UserData:data.rows[0],UserToken:UserToken,siRoles:siRoles}});
+      }else{
+        res.status(200).json({found: false,msg: "error",userInfo:null});
+      }
+   
+    })
+    .catch((err)=>{
+        res.status(400).json({status:"ERROR",message:err})
+    });
+  }catch(err){
+    res.status(400).json({status:"ERROR",message:err})
+  }
 };
 
 app.post("/ad/webapi/api/auth1", Login);
