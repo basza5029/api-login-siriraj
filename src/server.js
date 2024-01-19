@@ -46,9 +46,34 @@ const UserData ={
     pager: "",
   }
 
-const Login = (req, res) => {
-  console.log(req.body.user);
-  res.status(200).json({found: true,msg: "Success",userInfo:{UserData:UserData,UserToken:UserToken,siRoles:siRoles}});
+  
+const {Pool} = require("pg");
+const pool  = new Pool({
+    user:"root",
+    host:"dpg-cmboofv109ks73adkjmg-a.singapore-postgres.render.com",
+    password:"YVINDPHCEmNLIunRvC0s2OJiOrukNwED",
+    database:"basdb",
+    port:5432,
+    ssl: true
+});
+
+pool.connect(
+  (err)=>{ 
+  if (err) throw err; console.log("connect");
+})
+
+const Login = async(req, res) => {
+  const {name} = req.body.user;
+  const query = `SELECT * FROM "AD_Siriraj" WHERE username = '${name}'`;
+  console.log(query);
+  await pool.query(query)
+  .then((data)=>{
+    res.status(200).json({found: true,msg: "Success",userInfo:{UserData:data.rows[0],UserToken:UserToken,siRoles:siRoles}});
+  })
+  .catch((err)=>{
+      res.status(400).json({status:"ERROR",message:err})
+  });
+
 };
 
 app.post("/ad/webapi/api/auth1", Login);
