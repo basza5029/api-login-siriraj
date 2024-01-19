@@ -68,7 +68,6 @@ const Login = async(req, res) => {
   try{
     const {name} = req.body.user;
     const query = `SELECT * FROM "AD_Siriraj" WHERE username = '${name}'`;
-    console.log(query);
     await pool.query(query)
     .then((data)=>{
       if (data.rows[0]){
